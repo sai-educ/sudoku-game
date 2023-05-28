@@ -1,0 +1,44 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f7f7f7;
+    font-family: 'Arial', sans-serif;
+}
+
+#sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    gap: 5px;
+    width: 450px;
+    height: 450px;
+}
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #000;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.cell:nth-child(3n), .cell:nth-child(3n + 1), .cell:nth-child(3n + 2) {
+    border-right: 2px solid #000;
+}
+
+.cell:nth-child(3n) {
+    border-right: none;
+}
+
+.cell:nth-last-child(-n + 3), .cell:nth-last-child(-n + 6), .cell:nth-last-child(-n + 9) {
+    border-bottom: 2px solid #000;
+}
+
+.cell:nth-last-child(-n + 3) {
+    border-bottom: none;
+}
