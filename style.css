@@ -11,7 +11,6 @@ body {
 #sudoku-board {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(9, 1fr);
     gap: 5px;
     width: 450px;
     height: 450px;

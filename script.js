@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
+    const board = document.getElementById('sudoku-board');
+    for(let i=0; i<81; i++){
+        const cell = document.createElement('input');
+        cell.setAttribute('class', 'cell');
+        cell.setAttribute('maxlength', '1');
+        board.appendChild(cell);
+    }
+    
     const cells = Array.from(document.getElementsByClassName('cell'));
 
     cells.forEach(cell => {
