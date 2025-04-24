@@ -1,13 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Sudoku Web</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Sudoku</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="sudoku-board">
-        <!-- Your Sudoku grid will be generated here by your JavaScript -->
+    <h1>Web Sudoku</h1>
+
+    <div id="difficulty-screen" class="screen active">
+        <h2>Select Difficulty</h2>
+        <button data-difficulty="easy">Easy</button>
+        <button data-difficulty="medium">Medium</button>
+        <button data-difficulty="hard">Hard</button>
+        <button data-difficulty="godzilla">Godzilla</button>
     </div>
+
+    <div id="game-screen" class="screen">
+        <div class="game-info">
+            <span>Difficulty: <span id="difficulty-display"></span></span>
+            <span>Wrong Attempts: <span id="attempts-display">0</span> / 3</span>
+        </div>
+
+        <div id="sudoku-grid">
+            </div>
+
+        <div id="number-pad">
+            </div>
+
+        <div id="game-controls">
+            <button id="restart-btn">Restart Game</button>
+        </div>
+
+        <div id="message-area">
+            </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,43 +1,162 @@
 body {
+    font-family: sans-serif;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
+    background-color: #f0f0f0;
     margin: 0;
-    background-color: #f7f7f7;
-    font-family: 'Arial', sans-serif;
+    padding-top: 20px;
 }
 
-#sudoku-board {
+h1 {
+    color: #333;
+}
+
+.screen {
+    display: none; /* Hide screens by default */
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.screen.active {
+    display: flex; /* Show the active screen */
+}
+
+#difficulty-screen button {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+}
+#difficulty-screen button:hover {
+    background-color: #45a049;
+}
+
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    width: 360px; /* Match grid width approx */
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+#sudoku-grid {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    gap: 5px;
-    width: 450px;
-    height: 450px;
+    grid-template-columns: repeat(9, 40px);
+    grid-template-rows: repeat(9, 40px);
+    width: 362px; /* 9 * 40px + 2px borders */
+    height: 362px;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+    background-color: #eee; /* Background for grid lines */
+    gap: 1px; /* Create grid lines */
 }
 
-.cell {
+.grid-cell {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border: none; /* Use gap for lines */
+    /* border: 1px solid #ccc; */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
-    border: 1px solid #000;
+    font-size: 1.4em;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 20px;
+    box-sizing: border-box; /* Include padding/border in size */
 }
 
-.cell:nth-child(3n), .cell:nth-child(3n + 1), .cell:nth-child(3n + 2) {
-    border-right: 2px solid #000;
+/* Thicker borders for 3x3 blocks */
+.grid-cell:nth-child(3n) { border-right: 2px solid #333; }
+.grid-cell:nth-child(9n) { border-right: none; } /* Override last column */
+.grid-cell:nth-child(n+19):nth-child(-n+27),
+.grid-cell:nth-child(n+46):nth-child(-n+54) { border-bottom: 2px solid #333; }
+/* Adjust for gap */
+#sudoku-grid {
+    padding-right: 1px; /* Account for right border */
+    padding-bottom: 1px; /* Account for bottom border */
+}
+.grid-cell:nth-child(n+73) { border-bottom: none; } /* Override last row */
+/* Fix border overlap at corners */
+.grid-cell:nth-child(27), .grid-cell:nth-child(54) { border-bottom: 2px solid #333;}
+.grid-cell:nth-child(9n-6), .grid-cell:nth-child(9n-3) { border-right: 2px solid #333; }
+
+.pre-filled {
+    background-color: #e0e0e0;
+    cursor: default;
+    color: #333;
 }
 
-.cell:nth-child(3n) {
-    border-right: none;
+.user-filled {
+    color: #0067c1; /* Blue for user numbers */
 }
 
-.cell:nth-last-child(-n + 3), .cell:nth-last-child(-n + 6), .cell:nth-last-child(-n + 9) {
-    border-bottom: 2px solid #000;
+.selected {
+    background-color: #a8d1ff !important; /* Light blue highlight */
 }
 
-.cell:nth-last-child(-n + 3) {
-    border-bottom: none;
+.incorrect { /* Style for wrong numbers (maybe shown at end) */
+    color: red;
+    /* background-color: #ffdddd; */
+}
+
+#number-pad {
+    display: grid;
+    grid-template-columns: repeat(5, 50px); /* Adjust columns if needed */
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#number-pad button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+}
+#number-pad button:hover {
+    background-color: #eee;
+}
+#number-pad button:active {
+    background-color: #ddd;
+}
+
+#game-controls button {
+    font-size: 1em;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #f44336;
+    color: white;
+}
+#game-controls button:hover {
+    background-color: #da190b;
+}
+
+#message-area {
+    margin-top: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    min-height: 2em; /* Reserve space */
+}
+#message-area.win {
+    color: green;
+}
+#message-area.lose {
+    color: red;
 }
