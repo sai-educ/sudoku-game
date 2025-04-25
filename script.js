@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Displays
     const gridContainer = document.getElementById('sudoku-grid');
     const difficultyDisplay = document.getElementById('difficulty-display');
-    const attemptsDisplay = document.getElementById('attempts-display');
+    const attemptsInfo = document.getElementById('attempts-info'); // Changed ID
     const messageArea = document.getElementById('message-area');
 
     // Game State Variables
     let currentDifficulty = '';
-    let lives = 0;
+    // let lives = 0; // REMOVED lives variable
     let puzzleBoard = []; // The initial puzzle state (0 for empty)
     let solutionBoard = []; // The fully solved board
     let workingBoard = []; // The board with user inputs
@@ -41,29 +41,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     restartButton.addEventListener('click', () => {
         showScreen(difficultyScreen);
-        // Optionally clear grid/state immediately or wait until new game starts
         gridContainer.innerHTML = '';
         numberPadContainer.innerHTML = '';
         messageArea.textContent = '';
-        messageArea.className = ''; // Reset message style
+        messageArea.className = '';
     });
 
     // --- Game Setup ---
 
     function startGame(difficulty) {
-        difficultyDisplay.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1); // Capitalize
-        lives = 3; // Example: Set lives
-        attemptsDisplay.textContent = `0 / ${lives}`;
+        difficultyDisplay.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+        attemptsInfo.textContent = 'Unlimited'; // Set text for unlimited attempts
         messageArea.textContent = '';
-        messageArea.className = ''; // Reset message style
+        messageArea.className = '';
         selectedCell = null;
 
         // **IMPORTANT: Placeholder for actual Sudoku generation logic**
-        // This function needs to create a puzzle and its solution based on difficulty
         const { puzzle, solution } = generateSudokuPuzzle(difficulty);
         puzzleBoard = puzzle;
         solutionBoard = solution;
-        // Deep copy the puzzle to start the working board
         workingBoard = puzzle.map(row => [...row]);
 
         generateGrid();
@@ -73,46 +69,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // **Placeholder Function - Needs Implementation**
     function generateSudokuPuzzle(difficulty) {
-        // This is where your Sudoku generation algorithm goes.
-        // It should return an object like:
-        // {
-        //   puzzle: [ [5,3,0, ...], [6,0,0, ...], ... ], // 9x9 array, 0 for empty
-        //   solution: [ [5,3,4, ...], [6,7,2, ...], ... ] // 9x9 array, complete solution
-        // }
-        console.warn(`generateSudokuPuzzle(${difficulty}) needs implementation!`);
-        // Example static puzzle for testing:
+        // (Keep your existing generation logic here)
+        console.warn(`generateSudokuPuzzle(${difficulty}) needs implementation! Using static puzzle.`);
         const easyPuzzle = [
-            [5, 3, 0, 0, 7, 0, 0, 0, 0],
-            [6, 0, 0, 1, 9, 5, 0, 0, 0],
-            [0, 9, 8, 0, 0, 0, 0, 6, 0],
-            [8, 0, 0, 0, 6, 0, 0, 0, 3],
-            [4, 0, 0, 8, 0, 3, 0, 0, 1],
-            [7, 0, 0, 0, 2, 0, 0, 0, 6],
-            [0, 6, 0, 0, 0, 0, 2, 8, 0],
-            [0, 0, 0, 4, 1, 9, 0, 0, 5],
-            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            [5, 3, 0, 0, 7, 0, 0, 0, 0], [6, 0, 0, 1, 9, 5, 0, 0, 0], [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3], [4, 0, 0, 8, 0, 3, 0, 0, 1], [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0], [0, 0, 0, 4, 1, 9, 0, 0, 5], [0, 0, 0, 0, 8, 0, 0, 7, 9]
         ];
-         const easySolution = [
-            [5, 3, 4, 6, 7, 8, 9, 1, 2],
-            [6, 7, 2, 1, 9, 5, 3, 4, 8],
-            [1, 9, 8, 3, 4, 2, 5, 6, 7],
-            [8, 5, 9, 7, 6, 1, 4, 2, 3],
-            [4, 2, 6, 8, 5, 3, 7, 9, 1],
-            [7, 1, 3, 9, 2, 4, 8, 5, 6],
-            [9, 6, 1, 5, 3, 7, 2, 8, 4],
-            [2, 8, 7, 4, 1, 9, 6, 3, 5],
-            [3, 4, 5, 2, 8, 6, 1, 7, 9]
+        const easySolution = [
+            [5, 3, 4, 6, 7, 8, 9, 1, 2], [6, 7, 2, 1, 9, 5, 3, 4, 8], [1, 9, 8, 3, 4, 2, 5, 6, 7],
+            [8, 5, 9, 7, 6, 1, 4, 2, 3], [4, 2, 6, 8, 5, 3, 7, 9, 1], [7, 1, 3, 9, 2, 4, 8, 5, 6],
+            [9, 6, 1, 5, 3, 7, 2, 8, 4], [2, 8, 7, 4, 1, 9, 6, 3, 5], [3, 4, 5, 2, 8, 6, 1, 7, 9]
         ];
         return { puzzle: easyPuzzle, solution: easySolution };
     }
 
     function generateGrid() {
-        gridContainer.innerHTML = ''; // Clear previous grid
+        gridContainer.innerHTML = '';
         for (let r = 0; r < 9; r++) {
             for (let c = 0; c < 9; c++) {
                 const cell = document.createElement('div');
                 cell.classList.add('grid-cell');
-                cell.dataset.row = r; // Store row/col for later reference
+                cell.dataset.row = r;
                 cell.dataset.col = c;
 
                 const value = puzzleBoard[r][c];
@@ -120,31 +98,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     cell.textContent = value;
                     cell.classList.add('pre-filled');
                 } else {
-                    // Add click listener only to empty cells
                     cell.addEventListener('click', handleCellClick);
                 }
-
-                // Add thicker border classes (adjust logic if CSS handles it fully)
-                 if ((c + 1) % 3 === 0 && c !== 8) cell.style.borderRight = "2px solid #333";
-                 if ((r + 1) % 3 === 0 && r !== 8) cell.style.borderBottom = "2px solid #333";
-                 // Your CSS might already handle this using nth-child selectors more effectively
-
+                // CSS should handle borders primarily now
                 gridContainer.appendChild(cell);
             }
         }
     }
 
     function generateNumberPad() {
-        numberPadContainer.innerHTML = ''; // Clear previous pad
+        numberPadContainer.innerHTML = '';
         for (let i = 1; i <= 9; i++) {
             const button = document.createElement('button');
             button.textContent = i;
             button.addEventListener('click', handleNumberClick);
             numberPadContainer.appendChild(button);
         }
-        // Add Erase button (optional)
         const eraseButton = document.createElement('button');
-        eraseButton.textContent = 'X'; // Or use an icon/word
+        eraseButton.textContent = 'X';
         eraseButton.addEventListener('click', handleEraseClick);
         numberPadContainer.appendChild(eraseButton);
     }
@@ -153,126 +124,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleCellClick(event) {
         const clickedCell = event.target;
-
-        // Ignore clicks on non-empty cells (should only be on empty ones due to listener placement)
         if (clickedCell.classList.contains('pre-filled')) return;
 
-        // Deselect previous cell
         if (selectedCell) {
             selectedCell.classList.remove('selected');
         }
-
-        // Select new cell
         selectedCell = clickedCell;
         selectedCell.classList.add('selected');
     }
 
     function handleNumberClick(event) {
-        if (!selectedCell) return; // Do nothing if no cell is selected
+        if (!selectedCell) return; // No cell selected
 
         const number = parseInt(event.target.textContent);
         const row = parseInt(selectedCell.dataset.row);
         const col = parseInt(selectedCell.dataset.col);
 
-        // **IMPORTANT: Placeholder for validation logic**
+        // Clear any previous incorrect flash first
+        selectedCell.classList.remove('temp-incorrect');
+
         if (isValidMove(row, col, number)) {
+            // --- Correct Number ---
             workingBoard[row][col] = number; // Update internal board
             selectedCell.textContent = number;
             selectedCell.classList.add('user-filled');
-            selectedCell.classList.remove('incorrect'); // Remove incorrect if previously marked
+            selectedCell.classList.remove('incorrect'); // Should not be needed now
 
-            // **IMPORTANT: Placeholder for win check**
             if (checkWin()) {
                 messageArea.textContent = "Congratulations! You solved it!";
                 messageArea.classList.add('win');
-                // Disable further input?
-                 selectedCell.classList.remove('selected');
-                 selectedCell = null;
-                 // Disable number pad?
+                if (selectedCell) selectedCell.classList.remove('selected');
+                selectedCell = null;
+                // Optionally disable number pad or grid interactions
             }
-
         } else {
-            // Incorrect move handling
-            const currentAttempts = parseInt(attemptsDisplay.textContent.split('/')[0].trim()) + 1;
-            attemptsDisplay.textContent = `${currentAttempts} / ${lives}`;
-            selectedCell.classList.add('incorrect'); // Temporarily show incorrect state
-             // Maybe remove the number after a short delay?
-             setTimeout(() => {
-                 if (selectedCell && selectedCell.classList.contains('incorrect')) {
-                     selectedCell.classList.remove('incorrect');
-                      // Clear the cell text ONLY if it wasn't a valid number for that spot ever
-                      // This depends on how you want invalid moves to behave
-                     // selectedCell.textContent = '';
-                     // workingBoard[row][col] = 0; // Reset internal board if needed
-                 }
-             }, 500); // Show red for 0.5 seconds
+            // --- Incorrect Number ---
+            // 1. Flash the cell visually
+            selectedCell.classList.add('temp-incorrect');
+            // Provide haptic feedback if available/desired
+            // if (navigator.vibrate) { navigator.vibrate(100); }
 
+            // 2. Remove the flash effect after a short delay
+            setTimeout(() => {
+                // Check if the cell still exists and has the class before removing
+                if (selectedCell && selectedCell.classList.contains('temp-incorrect')) {
+                    selectedCell.classList.remove('temp-incorrect');
+                }
+            }, 500); // Duration of the flash in milliseconds
 
-            if (currentAttempts >= lives) {
-                messageArea.textContent = "Game Over! Too many mistakes.";
-                messageArea.classList.add('lose');
-                // Disable input, maybe show solution?
-                 selectedCell.classList.remove('selected');
-                 selectedCell = null;
-                 // Disable number pad?
-            }
+            // 3. Crucially: Do NOT update the workingBoard or the cell's text content
+            // The incorrect number doesn't "stick"
         }
 
-        // Deselect cell after attempting a move (optional, depends on desired flow)
-        // selectedCell.classList.remove('selected');
+        // Optional: Deselect cell after every number attempt?
+        // if (selectedCell) selectedCell.classList.remove('selected');
         // selectedCell = null;
     }
 
     function handleEraseClick() {
-        if (!selectedCell || selectedCell.classList.contains('pre-filled')) return; // Can only erase user-filled cells
+        if (!selectedCell || selectedCell.classList.contains('pre-filled')) return;
 
         const row = parseInt(selectedCell.dataset.row);
         const col = parseInt(selectedCell.dataset.col);
 
-        workingBoard[row][col] = 0; // Clear internal board state
+        workingBoard[row][col] = 0;
         selectedCell.textContent = '';
-        selectedCell.classList.remove('user-filled', 'incorrect');
+        selectedCell.classList.remove('user-filled', 'incorrect', 'temp-incorrect'); // Clear all states
     }
 
-    // --- Validation & Win Check (Placeholders) ---
+    // --- Validation & Win Check (Placeholders/Example) ---
 
     function isValidMove(row, col, num) {
-        // Check against the known solutionBoard
+        // Check against the known solutionBoard for correctness
         console.log(`Checking if ${num} is valid at (${row}, ${col}). Solution is ${solutionBoard[row][col]}`);
         return solutionBoard[row][col] === num;
-        // --- OR ---
-        // Implement traditional Sudoku validation rules (check row, col, 3x3 box)
-        // against the current `workingBoard` state. Be careful not to just check
-        // against the solution if you want players to figure it out.
-        // Example (traditional check):
-        // function isSafe(board, r, c, n) {
-        //     // Check row
-        //     for(let x=0; x<9; x++) if(board[r][x] === n && x !== c) return false;
-        //     // Check col
-        //     for(let x=0; x<9; x++) if(board[x][c] === n && x !== r) return false;
-        //     // Check box
-        //     const startRow = r - r % 3, startCol = c - c % 3;
-        //     for(let i=0; i<3; i++)
-        //         for(let j=0; j<3; j++)
-        //             if(board[i+startRow][j+startCol] === n && (i+startRow !== r || j+startCol !== c)) return false;
-        //     return true;
-        // }
-        // return isSafe(workingBoard, row, col, num); // Check against current state
     }
 
     function checkWin() {
-        // Check if the workingBoard matches the solutionBoard OR if workingBoard is full and valid
         for (let r = 0; r < 9; r++) {
             for (let c = 0; c < 9; c++) {
                 if (workingBoard[r][c] === 0 || workingBoard[r][c] !== solutionBoard[r][c]) {
-                    return false; // Board not full or doesn't match solution
+                    return false;
                 }
             }
         }
-        return true; // Board is full and matches solution
+        return true;
     }
 
     // --- Initial State ---
-    showScreen(difficultyScreen); // Start on the difficulty selection
+    showScreen(difficultyScreen);
 
 }); // End DOMContentLoaded
